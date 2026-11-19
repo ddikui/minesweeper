@@ -1,0 +1,576 @@
+/* === 전역 설정 및 변수 === */
+:root {
+  --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-lcd: 'Share Tech Mono', monospace, sans-serif;
+}
+
+/* --- 테마 1: 레트로 (Windows 95/98 스타일) --- */
+body.theme-retro {
+  --bg-color: #008080; /* 클래식 윈도우 틸 */
+  --window-bg: #c0c0c0;
+  --border-light: #ffffff;
+  --border-dark: #808080;
+  --border-darkest: #000000;
+  --text-main: #000000;
+  --tile-bg: #c0c0c0;
+  --tile-revealed: #bdbdbd;
+  --lcd-bg: #000000;
+  --lcd-text: #ff0000;
+  --modal-bg: #c0c0c0;
+  --btn-primary-bg: #000080;
+  --btn-primary-text: #ffffff;
+}
+
+/* --- 테마 2: 모던 다크 (Modern Dark / Neon) --- */
+body.theme-modern {
+  --bg-color: #0f172a;
+  --window-bg: #1e293b;
+  --border-light: #334155;
+  --border-dark: #0f172a;
+  --border-darkest: #020617;
+  --text-main: #f8fafc;
+  --tile-bg: #334155;
+  --tile-revealed: #1e293b;
+  --lcd-bg: #090d16;
+  --lcd-text: #38bdf8;
+  --modal-bg: #1e293b;
+  --btn-primary-bg: #38bdf8;
+  --btn-primary-text: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 16px;
+  transition: background-color 0.25s ease;
+}
+
+/* 전체 컨테이너 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+}
+
+/* 헤더 */
+.app-header {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+.title-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-area h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+.game-icon {
+  font-size: 1.4rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* 난이도 바 */
+.difficulty-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.diff-btn {
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  padding: 6px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.diff-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.diff-btn.active {
+  background: #ffffff;
+  color: #1a1a1a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* 모바일 조작 모드 토글 */
+.mobile-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mobile-hint {
+  font-size: 0.85rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.mode-switch {
+  display: inline-flex;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 3px;
+  border-radius: 20px;
+}
+
+.mode-btn {
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mode-btn.active {
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+/* 게임 윈도우 공통 프레임 */
+.game-window {
+  background: var(--window-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s;
+}
+
+/* 레트로 윈도우 스타일 베벨 */
+body.theme-retro .game-window {
+  border: 3px solid;
+  border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+  padding: 8px;
+}
+
+/* 모던 윈도우 스타일 */
+body.theme-modern .game-window {
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+/* 상단 상태창 (지뢰수, 스마일리, 타이머) */
+.game-status-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+}
+
+body.theme-retro .game-status-panel {
+  background: var(--window-bg);
+  border: 2px solid;
+  border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+}
+
+body.theme-modern .game-status-panel {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+}
+
+/* 7세그먼트 / LCD 디스플레이 */
+.lcd-display {
+  font-family: var(--font-lcd);
+  background: var(--lcd-bg);
+  color: var(--lcd-text);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 6px;
+  border-radius: 4px;
+  letter-spacing: 2px;
+  min-width: 65px;
+  text-align: center;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+}
+
+/* 스마일리 리셋 버튼 */
+.face-btn {
+  font-size: 1.6rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: var(--tile-bg);
+  transition: transform 0.05s ease;
+}
+
+body.theme-retro .face-btn {
+  border: 3px solid;
+  border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+}
+
+body.theme-retro .face-btn:active {
+  border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+}
+
+body.theme-modern .face-btn {
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+body.theme-modern .face-btn:active {
+  transform: scale(0.92);
+}
+
+/* 보드 래퍼 (가로 스크롤 가능하도록) */
+.board-wrapper {
+  overflow: auto;
+  max-width: 95vw;
+  max-height: 70vh;
+  margin: 0 auto;
+}
+
+body.theme-retro .board-wrapper {
+  border: 3px solid;
+  border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+}
+
+body.theme-modern .board-wrapper {
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+}
+
+/* 지뢰 보드 격자 */
+.board {
+  display: grid;
+  gap: 0;
+  width: max-content;
+}
+
+body.theme-modern .board {
+  gap: 2px;
+  padding: 2px;
+  background: var(--border-dark);
+}
+
+/* 개별 타일 (셀) */
+.tile {
+  width: 30px;
+  height: 30px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: var(--tile-bg);
+  box-sizing: border-box;
+}
+
+/* 레트로 스타일 타일 베벨 */
+body.theme-retro .tile {
+  border: 2px solid;
+  border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+}
+
+body.theme-retro .tile.revealed {
+  border: 1px solid #7b7b7b;
+  background-color: var(--tile-revealed);
+}
+
+body.theme-retro .tile.flagged {
+  /* 깃발 */
+}
+
+/* 모던 스타일 타일 */
+body.theme-modern .tile {
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.15s;
+}
+
+body.theme-modern .tile:hover:not(.revealed) {
+  filter: brightness(1.15);
+}
+
+body.theme-modern .tile.revealed {
+  background-color: var(--tile-revealed);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* 지뢰 폭발 타일 */
+.tile.mine-exploded {
+  background-color: #ef4444 !important;
+  animation: pulse-red 0.5s infinite alternate;
+}
+
+/* 잘못 꽂힌 깃발 */
+.tile.false-flag {
+  background-color: #fca5a5 !important;
+  text-decoration: line-through;
+}
+
+/* 숫자별 클래식 색상 */
+.tile[data-count="1"] { color: #0000ff; }
+.tile[data-count="2"] { color: #008000; }
+.tile[data-count="3"] { color: #ff0000; }
+.tile[data-count="4"] { color: #000080; }
+.tile[data-count="5"] { color: #800000; }
+.tile[data-count="6"] { color: #008080; }
+.tile[data-count="7"] { color: #000000; }
+.tile[data-count="8"] { color: #808080; }
+
+/* 모던 테마에서의 숫자 색상 보정 (시인성) */
+body.theme-modern .tile[data-count="1"] { color: #38bdf8; }
+body.theme-modern .tile[data-count="2"] { color: #4ade80; }
+body.theme-modern .tile[data-count="3"] { color: #f87171; }
+body.theme-modern .tile[data-count="4"] { color: #818cf8; }
+body.theme-modern .tile[data-count="5"] { color: #fb923c; }
+body.theme-modern .tile[data-count="6"] { color: #2dd4bf; }
+body.theme-modern .tile[data-count="7"] { color: #e2e8f0; }
+body.theme-modern .tile[data-count="8"] { color: #94a3b8; }
+
+/* 하단 팁 */
+.game-footer {
+  margin-top: 14px;
+  text-align: center;
+  max-width: 500px;
+}
+
+.tip-text {
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  line-height: 1.4;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* 모달 공통 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-box {
+  background: var(--modal-bg);
+  color: var(--text-main);
+  padding: 20px 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+body.theme-retro .modal-box {
+  border: 3px solid;
+  border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+  border-radius: 0;
+}
+
+.modal-box h2 {
+  font-size: 1.15rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.input-group {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.input-group input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #999;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #000;
+}
+
+.stats-list {
+  list-style: none;
+  margin-bottom: 18px;
+}
+
+.stats-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(128, 128, 128, 0.4);
+  font-size: 0.9rem;
+}
+
+.help-content {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.help-content hr {
+  margin: 10px 0;
+  border: 0;
+  border-top: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+.help-content ul {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-primary, .btn-secondary, .btn-danger {
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: filter 0.15s;
+}
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.btn-secondary {
+  background: #888;
+  color: #fff;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+.btn-primary:hover, .btn-secondary:hover, .btn-danger:hover {
+  filter: brightness(1.1);
+}
+
+/* 콘페티 캔버스 */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+/* 모바일 화면 최적화 */
+@media (max-width: 600px) {
+  body {
+    padding: 8px 4px;
+  }
+  
+  .tile {
+    width: 28px;
+    height: 28px;
+    font-size: 0.95rem;
+  }
+
+  .title-area h1 {
+    font-size: 1.1rem;
+  }
+
+  .diff-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+}
