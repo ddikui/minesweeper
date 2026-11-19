@@ -2,6 +2,8 @@
 
 클래식 Windows 레트로 감성과 모던 다크 테마를 모두 지원하는 완성형 웹 지뢰찾기 게임입니다.
 
+🌐 **온라인 플레이 (GitHub Pages)**: [https://ddikui.github.io/minesweeper/](https://ddikui.github.io/minesweeper/)
+
 ---
 
 ## 🎮 주요 기능
